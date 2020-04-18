@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // CORs setup
 const allowedOrigins = [
-    'nba.hkung.me',
+    'https://nba.hkung.me',
     // uncomment for development purposes
     // 'localhost:8080',
     // 'localhost:3000',
