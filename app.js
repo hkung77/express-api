@@ -24,8 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const allowedOrigins = [
     'nba.hkung.me',
     // uncomment for development purposes
-    'localhost:8080',
-    'localhost:3000',
+    // 'localhost:8080',
+    // 'localhost:3000',
 ];
 
 app.use(cors({
