@@ -27,7 +27,7 @@ router.get('/', (req, res, next) => {
 router.get('/nba/teamSearch', cors(), (req, res, next) => {
     const term = req.query.searchTerm;
 
-    const data = NBA.teams.filter((team) => team.teamName.match(new RegExp(term)));
+    const data = NBA.teams.filter((team) => team.teamName.match(new RegExp(term, 'i')));
     res.json({ data });
 });
 
@@ -35,7 +35,7 @@ router.get('/nba/teamSearch', cors(), (req, res, next) => {
 router.get('/nba/playerSearch', cors(), (req, res, next) => {
     const term = req.query.searchTerm;
 
-    const data = NBA.players.filter(player => player.fullName.match(new RegExp(term)));
+    const data = NBA.players.filter(player => player.fullName.match(new RegExp(term, 'i')));
 
     res.json({data});
 });
