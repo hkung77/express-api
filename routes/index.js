@@ -1,6 +1,21 @@
-const express = require('express');
+const express = require('express');jk
 const router = express.Router();
+const cors = require('cors');
+
 const NBA = require('nba');
+
+const whiteList = ['https://nba.hkung.me', 'http://nba.hkung.me'];
+
+
+const corsOption = {
+    origin: (origin) => {
+        if (whiteList.indexOf(origin) > -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Invalid CORS'));
+        }
+    }
+};
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -8,7 +23,8 @@ router.get('/', (req, res, next) => {
 });
 
 // NBA API Routes
-router.get('/nba/teamSearch', (req, res, next) => {
+
+router.get('/nba/teamSearch', cors(), (req, res, next) => {
     const term = req.query.searchTerm;
 
     const data = NBA.teams.filter((team) => team.teamName.match(new RegExp(term)));
@@ -16,7 +32,7 @@ router.get('/nba/teamSearch', (req, res, next) => {
 });
 
 
-router.get('/nba/playerSearch', (req, res, next) => {
+router.get('/nba/playerSearch', cors(), (req, res, next) => {
     const term = req.query.searchTerm;
 
     const data = NBA.players.filter(player => player.fullName.match(new RegExp(term)));
