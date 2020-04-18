@@ -47,7 +47,7 @@ router.get('/nba/playerSearch', cors(), (req, res, next) => {
     const data = NBA.players.filter(player => player.fullName.match(new RegExp(term, 'i')));
     data.forEach(async (player, index) => {
         const response = await getImage(player.fullName);
-        player.image = response.items[0].link;
+        const image = response.items[0].link;
         player.image = image;
 
         if (data.length === index+1) {
