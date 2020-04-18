@@ -10,9 +10,13 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+if (process.env.NODE_ENVRIONMENT !== 'production') {
+    require('dotenv').config();
+}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'react');
+app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
