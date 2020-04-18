@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,6 +19,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// CORs setup
+const allowedOrigins = [
+    'nba.hkung.me',
+    // uncomment for development purposes
+    'localhost:8080',
+    'localhost:3000',
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        // allow requests from mobile or curl
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) > -1) {
+            const msg = `The CORS policy for this site does not contain allowed access from the specified Origin`;
+            return callback(new Error(msg), false);
+        }
+    },
+}));
 
 app.use('/', indexRouter);
 // app.use('/users', usersRouter);
