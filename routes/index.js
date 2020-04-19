@@ -56,5 +56,17 @@ router.get('/nba/playerSearch', cors(), (req, res, next) => {
     })
 });
 
+router.get('/nba/playerDetailsSearch', cors(), async (req, res, next) => {
+    const playerId = req.query.playerId;
+    const data = {}
+    try {
+        data['bio'] = await NBA.stats.playerInfo({ PlayerID: playerId });
+        data['stats'] = await NBA.stats.playerProfile({ PlayerID: playerId })
+        res.json({data}); 
+    } catch(error) {
+        console.error(error);
+        res.status(404).send({ message: "Player not found" });
+    }
+});
 
 module.exports = router;
