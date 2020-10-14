@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const NBA = require('nba');
+const nba = require('./nba-api');
+const magic = require('./magic-api');
+const { route } = require('./users');
 
-const getImage = require('./getImage');
-
-const whiteList = ['https://nba.hkung.me', 'http://nba.hkung.me'];
-
+const whiteList = ['https://nba.hkung.me', 'http://nba.hkung.me', 'http://localhost:8080'];
 
 const corsOption = {
     origin: (origin) => {
@@ -24,49 +23,12 @@ router.get('/', (req, res, next) => {
 });
 
 // NBA API Routes
+router.get('/nba/teamSearch', cors(), nba.teamSearch);
+router.get('/nba/playerSearch', cors(), nba.playerSearch);
+router.get('/nba/playerDetailsSearch', cors(), nba.playerDetailsSearch);
 
-router.get('/nba/teamSearch', cors(), (req, res, next) => {
-    const term = req.query.searchTerm;
-
-    const data = NBA.teams.filter((team) => team.teamName.match(new RegExp(term, 'i')));
-    data.forEach(async (teams, index) => {
-        const response = await getImage(teams.teamName);
-        const image = response.items[0].link;
-        teams.image = image;
-
-        if (data.length === index+1) {
-            res.json({ data });
-        }
-    });
-});
-
-
-router.get('/nba/playerSearch', cors(), (req, res, next) => {
-    const term = req.query.searchTerm;
-
-    const data = NBA.players.filter(player => player.fullName.match(new RegExp(term, 'i')));
-    data.forEach(async (player, index) => {
-        const response = await getImage(player.fullName);
-        const image = response.items[0].link;
-        player.image = image;
-
-        if (data.length === index+1) {
-            res.json({data});
-        }
-    })
-});
-
-router.get('/nba/playerDetailsSearch', cors(), async (req, res, next) => {
-    const playerId = req.query.playerId;
-    const data = {}
-    try {
-        data['bio'] = await NBA.stats.playerInfo({ PlayerID: playerId });
-        data['stats'] = await NBA.stats.playerProfile({ PlayerID: playerId })
-        res.json({data}); 
-    } catch(error) {
-        console.error(error);
-        res.status(404).send({ message: "Player not found" });
-    }
-});
+// MAGIC API Routes
+router.post('/magic/login', cors(), magic.login);
+router.post('/magic/signup', cors(), magic.signup);
 
 module.exports = router;
