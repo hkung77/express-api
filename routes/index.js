@@ -5,7 +5,7 @@ const nba = require('./nba-api');
 const magic = require('./magic-api');
 const { route } = require('./users');
 
-const whiteList = ['https://nba.hkung.me', 'http://nba.hkung.me', 'http://localhost:8080'];
+const whiteList = ['https://nba.hkung.me', 'http://nba.hkung.me', 'https://magic.hkung.me','http://magic.hkung.me'];
 
 const corsOption = {
     origin: (origin) => {
