@@ -2,6 +2,18 @@ const MongoClient = require("mongodb").MongoClient;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+exports.jwtAuth = async (req, res, next) => {
+  const TOKEN_SECRET = process.env.TOKEN_SECRET;
+  const token = req.headers.authorization;
+  try {
+    const validToken = await jwt.verify(token, TOKEN_SECRET);
+    res.locals.user = validToken.email;
+    next();
+  } catch (e) {
+    res.status(401).send({ error: 'Unauthorized' });
+  }
+};
+
 exports.login = (req, res) => {
   const { email, password } = req.body;
   const MONGO_USERNAME = process.env.MONGODB_USERNAME;
@@ -35,7 +47,7 @@ exports.login = (req, res) => {
       // If either or is not valid we should send a generic error response
       if (!!user && bcrypt.compareSync(password, user.password)) {
         // Generate Token
-        const userToken = jwt.sign(lowerCaseEmail, TOKEN_SECRET, {epiresIn: '1800s'});
+        const userToken = jwt.sign({ email: lowerCaseEmail}, TOKEN_SECRET, { expiresIn: '2h'});
         res.status(200).send({ token: userToken });
       } else {
         res.status(401).send({ error: "Username / password not valid" });
@@ -43,6 +55,7 @@ exports.login = (req, res) => {
 
       client.close();
     } catch (e) {
+      console.log(e);
       res.status(500).send({ error: "Unexpected Error Occured" });
     }
   });

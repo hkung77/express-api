@@ -29,5 +29,6 @@ router.get('/nba/playerDetailsSearch', cors(), nba.playerDetailsSearch);
 // MAGIC API Routes
 router.post('/magic/login', cors(), magic.login);
 router.post('/magic/signup', cors(), magic.signup);
+router.get('/magic/cards', cors(), magic.jwtAuth, magic.getCards);
 
 module.exports = router;

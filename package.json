@@ -18,6 +18,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.2",
     "morgan": "~1.9.1",
+    "mtgsdk": "^0.4.3",
     "nba": "^4.13.0"
   }
 }
