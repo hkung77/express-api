@@ -19,7 +19,7 @@ const corsOption = {
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-    res.send('hello world');
+    res.redirect('https://hkung.me');
 });
 
 // NBA API Routes
