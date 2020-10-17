@@ -1,5 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
@@ -31,8 +32,9 @@ exports.login = (req, res) => {
       // Check for user and password validity
       // If either or is not valid we should send a generic error response
       if (!!user && bcrypt.compareSync(password, user.password)) {
-        // TODO: Generate JWT
-        res.status(200).send({ token: "TBD" });
+        // Generate Token
+        const userToken = jwt.sign(lowerCaseEmail, TOKEN_SECRET, {epiresIn: '1800s'});
+        res.status(200).send({ token: userToken });
       } else {
         res.status(401).send({ error: "Username / password not valid" });
       }
@@ -47,6 +49,7 @@ exports.login = (req, res) => {
 exports.signup = (req, res) => {
   const MONGO_USERNAME = process.env.MONGODB_USERNAME;
   const MONGO_PASSWORD = process.env.MONGODB_PASSWORD;
+  const TOKEN_SECRET = process.env.TOKEN_SECRET;
   const url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@magic.uxmiw.mongodb.net/magic?authSource=admin&retryWrites=true&w=majority`;
 
   const { email, password } = req.body;
@@ -81,13 +84,16 @@ exports.signup = (req, res) => {
           null
         );
         const lowerCaseEmail = email.toString().toLowerCase();
-        // TODO:
-        // Generate a JWT
+
+        // Create User
         await userCollection.insertOne({
           email: lowerCaseEmail,
           password: hashedPassword,
         });
-        res.status(201).send({ token: "TBD" });
+
+        // Generate Token
+        const userToken = jwt.sign(lowerCaseEmail, TOKEN_SECRET, {epiresIn: '1800s'});
+        res.status(201).send({ token: userToken });
       } else {
         res.status(409).send({ error: "This user already exists" });
       }
