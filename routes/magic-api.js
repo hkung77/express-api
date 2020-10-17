@@ -6,6 +6,8 @@ exports.login = (req, res) => {
   const { email, password } = req.body;
   const MONGO_USERNAME = process.env.MONGODB_USERNAME;
   const MONGO_PASSWORD = process.env.MONGODB_PASSWORD;
+  const TOKEN_SECRET = process.env.TOKEN_SECRET;
+
   const url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@magic.uxmiw.mongodb.net/magic?authSource=admin&retryWrites=true&w=majority`;
 
   const client = new MongoClient(url, {
