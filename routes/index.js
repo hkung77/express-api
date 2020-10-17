@@ -3,9 +3,8 @@ const router = express.Router();
 const cors = require('cors');
 const nba = require('./nba-api');
 const magic = require('./magic-api');
-const { route } = require('./users');
 
-const whiteList = ['https://nba.hkung.me', 'http://nba.hkung.me', 'https://magic.hkung.me','http://magic.hkung.me'];
+const whiteList = ['https://nba.hkung.me', 'https://magic.hkung.me'];
 
 const corsOption = {
     origin: (origin) => {
