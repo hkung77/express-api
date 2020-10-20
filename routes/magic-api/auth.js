@@ -107,7 +107,7 @@ exports.signup = (req, res) => {
         });
 
         // Generate Token
-        const userToken = jwt.sign(lowerCaseEmail, TOKEN_SECRET, {epiresIn: '1800s'});
+        const userToken = jwt.sign(lowerCaseEmail, TOKEN_SECRET, {expiresIn: '2h'});
         res.status(201).send({ token: userToken });
       } else {
         res.status(409).send({ error: "This user already exists" });
