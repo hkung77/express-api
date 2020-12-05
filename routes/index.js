@@ -30,5 +30,7 @@ router.get('/nba/playerDetailsSearch', cors(), nba.playerDetailsSearch);
 router.post('/magic/login', cors(), magic.login);
 router.post('/magic/signup', cors(), magic.signup);
 router.get('/magic/cards', cors(), magic.jwtAuth, magic.getCards);
+// router.get('/magic/my-cards', cors(), magic.jwtAuth, magic.getMyCards);
+// router.psost('/magic/my-cards', cors(), magic.jwtAuth, magic.saveCard);
 
 module.exports = router;

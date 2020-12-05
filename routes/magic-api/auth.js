@@ -86,6 +86,7 @@ exports.signup = (req, res) => {
 
       // Initialize User Collection
       const userCollection = client.db("magic").collection("users");
+      const cardsCollection = client.db("magic").collection("cards");
 
       // Check if email already exists in DB
       const count = await userCollection
@@ -104,16 +105,25 @@ exports.signup = (req, res) => {
         await userCollection.insertOne({
           email: lowerCaseEmail,
           password: hashedPassword,
+        }, async (err, user) => {
+          if (err) {
+            client.close();
+            throw(err);
+          }
+          await cardsCollection.insertOne({uid: user.insertedId, cards: []});
+
+          client.close();
         });
 
+
         // Generate Token
-        const userToken = jwt.sign(lowerCaseEmail, TOKEN_SECRET, {expiresIn: '2h'});
+        const userToken = jwt.sign({ email: lowerCaseEmail }, TOKEN_SECRET, { expiresIn: '2h' });
         res.status(201).send({ token: userToken });
       } else {
         res.status(409).send({ error: "This user already exists" });
       }
-      client.close();
     } catch (e) {
+      console.log(e);
       res.status(500).send({ error: "Unexpected Error Occured" });
     }
   });
