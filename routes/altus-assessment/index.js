@@ -49,7 +49,7 @@ exports.getSchoolGrades = (req, res, next) => {
               "Content-Disposition",
               "attachment; filename=grades.csv"
             );
-            res.status(200).send(csv);
+            res.status(200).download(csv);
             client.close();
           }
         } catch (e) {
