@@ -12,7 +12,7 @@ exports.getSchoolGrades = (req, res, next) => {
   const json2csv = new Parser({ fields });
 
   try {
-    const schoolName = decodeURI(req.query.schoolName) || "";
+    const schoolName = (decodeURI(req.query.schoolName) || "").toLowerCase();
     if (schoolName.length === 0) {
       res.status(400).send({ error: "Missing school name" });
     } else {
